@@ -93,12 +93,12 @@ extern void MIPS_Instruction_Dump( MIPS_Instruction theMIPSInstruction ) {
 				theMIPSInstruction.Rs,
 				theMIPSInstruction.Rt,
 				theMIPSInstruction.Rd );
-				
+
 	printf( ">>>>ShiftAmt: %02X; FunctionCode: %02X; ImmediateValue: %04X;\n",
 				theMIPSInstruction.ShiftAmt,
 				theMIPSInstruction.FunctionCode,
 				theMIPSInstruction.ImmediateValue );
-				
+
 }
 
 void MIPS_Offset_Report() {
@@ -110,7 +110,7 @@ void MIPS_Offset_Report() {
 	printf( ">>>>Rs Offset: %d\n", MIPS_Rs_Offset );
 	printf( ">>>>OpCode Offset: %d\n", MIPS_OpCode_Offset );
 }
-	
+
 //
 //	The variable "theMIPS_Instruction" is a 32-bit MIPS instruction.
 //	The variable "theMIPSInstruction_Struct" is a structure
@@ -119,58 +119,58 @@ void MIPS_Offset_Report() {
 
 extern void MIPS_Decode( uint32_t theMIPS_Instruction,
 							MIPS_Instruction* theMIPSInstruction_Struct ) {
-							
+
 	//
-	//	This subroutine does not distinguish between 
+	//	This subroutine does not distinguish between
 	//		a R-format or an I-format instruction.
 	//
 	//	First extract the Immediate portion of the instruction.
 	//
 	theMIPSInstruction_Struct->ImmediateValue = (theMIPS_Instruction & MIPS_Immediate_Mask);
-	
+
 	//
 	//	Extract the remaining R-format fields
 	//
 	theMIPSInstruction_Struct->FunctionCode = (theMIPS_Instruction & MIPS_Function_Mask);
-	
+
 	theMIPSInstruction_Struct->ShiftAmt = ((theMIPS_Instruction >> MIPS_Shift_Offset) &
 												MIPS_Shift_Mask);
-												
+
 	theMIPSInstruction_Struct->Rd = ((theMIPS_Instruction >> MIPS_Rd_Offset) &
 												MIPS_Rd_Mask);
-												
+
 	theMIPSInstruction_Struct->Rt = ((theMIPS_Instruction >>  MIPS_Rt_Offset) &
 												 MIPS_Rt_Mask);
-												
+
 	theMIPSInstruction_Struct->Rs = ((theMIPS_Instruction >> MIPS_Rs_Offset) &
 												MIPS_Rs_Mask);
-												
+
 	theMIPSInstruction_Struct->OpCode = ((theMIPS_Instruction >> MIPS_OpCode_Offset) &
-												MIPS_OpCode_Mask);												
-												
+												MIPS_OpCode_Mask);
+
 //	MIPS_Instruction_Dump( *theMIPSInstruction_Struct );
-	
+
 }
-							
+
 //
 //*****************************************************************************
 //
 int32_t main() {
 
-	
+
 	uint32_t	Files_Nbr = 3;
 	uint32_t	Files_Idx;
 	char*		Filenames[] = { "MIPS_Instructions_01.txt" };
 	FILE*		MIPS_Iinstruction_File;
 	uint32_t	FReadStatus;
-	
+
 	char		Test_String[128];
 	uint32_t	aMIPS_Instruction;
-	
+
 	uint32_t	ALUStatus = 0;
 
 //	MIPS_Offset_Report();
-	
+
 	//
 	//	Load Primary_RegisterFile
 	//
@@ -182,7 +182,7 @@ int32_t main() {
 
 	printf( "Initial RegisterFile: ========================================\n" );
 	RegisterFile_Dump( Primary_RegisterFile );
-	
+
 	//
 	//	Open MIPS instruction file
 	//
@@ -192,20 +192,20 @@ int32_t main() {
 		printf( ">>>>File open error.\n" );
 		return( 0 );
 	}
-	
+
 //	printf( ">>>>File opened.\n" );
 
 	while( 1 ) {
 
 		FReadStatus = fscanf( MIPS_Iinstruction_File, "%x", &aMIPS_Instruction );
-		
-		//		
+
+		//
 		//	Check for end of file
 		//
 			if ( FReadStatus == EOF ) {
 				break;
 			}
-			
+
 		printf( "Instruction: %08X\n", aMIPS_Instruction );
 		MIPS_Decode( aMIPS_Instruction, &MIPS_Instruction_Seq[0] );
 		MIPS_Instruction_Dump( MIPS_Instruction_Seq[0] );
@@ -219,12 +219,11 @@ int32_t main() {
 						MIPS_Instruction_Seq[0].FunctionCode,
 						MIPS_Instruction_Seq[0].ImmediateValue,
 						&ALUStatus );
-						
+
 	}
-	
+
 	fclose( MIPS_Iinstruction_File );
 
 	printf( "Final RegisterFile: ========================================\n" );
 	RegisterFile_Dump( Primary_RegisterFile );
 }
-
