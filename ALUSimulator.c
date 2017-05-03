@@ -61,6 +61,17 @@ extern void ALUSimulator( RegisterFile theRegisterFile,
 				RdValue = RsValue - RtValue;
 				RegisterFile_Write(theRegisterFile, 1, Rd, RdValue);
 			}
+			else if(FunctionCode == 2){
+				RegisterFile_Read(theRegisterFile, Rs, &RsValue, Rt, &RtValue);
+				RdValue = RtValue >> ShiftAmt;
+				RegisterFile_Write(theRegisterFile, 1, Rd, RdValue);
+			}
+			else if(FunctionCode == 35){
+				RegisterFile_Read(theRegisterFile, Rs, &RsValue, Rt, &RtValue);
+				RdValue = RsValue - RtValue;
+				RegisterFile_Write(theRegisterFile, 1, Rd, RdValue);
+			}
+
 			break;
 		}
 		case 8:{
