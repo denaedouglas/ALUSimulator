@@ -60,21 +60,40 @@ extern void ALUSimulator( RegisterFile theRegisterFile,
 				RegisterFile_Read(theRegisterFile, Rs, &RsValue, Rt, &RtValue);
 				RdValue = RsValue - RtValue;
 				RegisterFile_Write(theRegisterFile, 1, Rd, RdValue);
-			} else if(FunctionCode == 36){
-				
+			}
+			else if(FunctionCode == 36){
+				RegisterFile_Read(theRegisterFile, Rs, &RsValue, Rt, &RtValue);
+				RdValue = RsValue & RtValue;
+				RegisterFile_Write(theRegisterFile, 1, Rd, RdValue);
+			}
+			else if(FunctionCode == 42){
+				RegisterFile_Read(theRegisterFile, Rs, &RsValue, Rt, &RtValue);
+				if(RsValue < RtValue){
+					RdValue = 1;
+				} else {
+					RdValue = 0;
+				}
+				RegisterFile_Write(theRegisterFile, 1, Rd, RdValue);
 			}
 			break;
 		}
 		case 8:{
 			RegisterFile_Read(theRegisterFile, Rs, &RsValue, Rt, &RtValue);
-			RsValue = RsValue + (int32_t)(int16_t)ImmediateValue;
-			RegisterFile_Write(theRegisterFile, 1, Rt, RsValue);
+			RtValue = RsValue + (int32_t)(int16_t)ImmediateValue;
+			RegisterFile_Write(theRegisterFile, 1, Rt, RtValue);
 			break;
 		}
 		case 9:{
 			break;
 		}
 		case 10:{
+			RegisterFile_Read(theRegisterFile, Rs, &RsValue, Rt, &RtValue);
+			if(RsValue < (int32_t)(int16_t)ImmediateValue){
+				RtValue = 1;
+			} else {
+				RtValue = 0;
+			}
+			RegisterFile_Write(theRegisterFile, 1, Rt, RtValue);
 			break;
 		}
 		case 11:{
