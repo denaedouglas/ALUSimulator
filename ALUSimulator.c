@@ -75,6 +75,22 @@ extern void ALUSimulator( RegisterFile theRegisterFile,
 				}
 				RegisterFile_Write(theRegisterFile, 1, Rd, RdValue);
 			}
+			else if(FunctionCode == 43){
+				RegisterFile_Read(theRegisterFile, Rs, &RsValue, Rt, &RtValue);
+				if(RsValue < RtValue){
+					RdValue = 1;
+				} else {
+					RdValue = 0;
+				}
+				RegisterFile_Write(theRegisterFile, 1, Rd, RdValue);
+			}
+			else if(FunctionCode == 3){
+				RegisterFile_Read(theRegisterFile, Rs, &RsValue, Rt, &RtValue);
+				for(int i = 0; i < ShiftAmt; i++){
+					RdValue = floor(RtValue/2);
+				}
+				RegisterFile_Write(theRegisterFile, 1, Rd, RdValue);
+			}
 			break;
 		}
 		case 8:{
@@ -84,6 +100,9 @@ extern void ALUSimulator( RegisterFile theRegisterFile,
 			break;
 		}
 		case 9:{
+			RegisterFile_Read(theRegisterFile, Rs, &RsValue, Rt, &RtValue);
+			RtValue = RsValue + (int32_t)(int16_t)ImmediateValue;
+			RegisterFile_Write(theRegisterFile, 1, Rt, RtValue);
 			break;
 		}
 		case 10:{
@@ -97,6 +116,13 @@ extern void ALUSimulator( RegisterFile theRegisterFile,
 			break;
 		}
 		case 11:{
+			RegisterFile_Read(theRegisterFile, Rs, &RsValue, Rt, &RtValue);
+			if(RsValue < (int32_t)(int16_t)ImmediateValue){
+				RtValue = 1;
+			} else {
+				RtValue = 0;
+			}
+			RegisterFile_Write(theRegisterFile, 1, Rt, RtValue);
 			break;
 		}
 	}
